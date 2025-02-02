@@ -1,0 +1,27 @@
+server:
+  port: 8092
+  forward-headers-strategy: framework
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:departmentdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+    platform: h2
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8091/eureka/
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}

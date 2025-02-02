@@ -1,0 +1,30 @@
+server:
+  port: 8093
+  forward-headers-strategy: framework
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8091/eureka/
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: departement-service
+          uri: lb://departement-service
+          predicates:
+            - Path=/departement/**
+          filters:
+            - RewritePath=/departement/(?<path>.*), /$\{path}
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/employee/**
+          filters:
+            - RewritePath=/employee/(?<path>.*), /$\{path}
